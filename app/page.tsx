@@ -1,9 +1,19 @@
-import Image from "next/image";
+/* eslint-disable @next/next/no-img-element */
+
+import List from "./components/list";
+import Check from "./components/check";
+import Header from "./components/header";
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      haidilao hot pot!!!
+    <main className="bg-[#D92622] w-full min-h-screen">
+      <Header />
+      <div className="flex items-center justify-center">
+        <Check />
+      </div>
+      <div className="flex  justify-center">
+        <List />
+      </div>
     </main>
   );
 }
