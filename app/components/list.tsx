@@ -45,8 +45,12 @@ export default function List() {
 
   const currentData = useMemo(() => {
     if (!user?.farcaster?.fid) return;
-    return data.find((item) => `${item.fid}` === `${user?.farcaster?.fid}`);
-  }, [data, user?.farcaster?.fid]);
+    return data.find(
+      (item) =>
+        `${item.fid}` === `${user?.farcaster?.fid}` ||
+        item.ethAddress === user?.wallet?.address
+    );
+  }, [data, user?.farcaster?.fid, user?.wallet?.address]);
 
   const renderData = useMemo(() => {
     if (!currentData) return data;

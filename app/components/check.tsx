@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { useCallback, useEffect, useState } from "react";
 import { HAIDILAO_PRICE, NEXT_PUBLIC_API_BASE_URL } from "@/lib/constants";
 import { HaidilaoData } from "./types";
+import { shortPubKey } from "@/lib/shortPubkey";
 
 export default function Check() {
   const { login, ready, authenticated, user, logout } = usePrivy();
@@ -17,10 +18,15 @@ export default function Check() {
       return;
     }
 
+    const fid = user?.farcaster?.fid || "";
+
     const resp = await fetch(
-      `${NEXT_PUBLIC_API_BASE_URL}/onboarding/haidilao?topNum=0&fid=${
-        user?.farcaster?.fid || ""
-      }&evmAddr=${user?.wallet?.address || ""}`
+      `${NEXT_PUBLIC_API_BASE_URL}/onboarding/haidilao?topNum=0&fid=${fid}&evmAddr=${
+        fid ? "" : user?.wallet?.address
+      }`,
+      {
+        method: "POST",
+      }
     );
     const data = await resp.json();
     if (data.code !== 0) {
@@ -28,11 +34,14 @@ export default function Check() {
       return;
     }
     // setChecked(true);
-    setCheckedData(data.data?.[0]);
+    setCheckedData(data.data);
   }, [authenticated, user?.farcaster?.fid, user?.wallet?.address, login]);
 
   useEffect(() => {
-    if (!user) return;
+    if (!user) {
+      setCheckedData(undefined);
+      return;
+    }
     checkMeHaidilao();
   }, [user, checkMeHaidilao]);
 
@@ -51,9 +60,11 @@ export default function Check() {
             }}
           >
             <div className="p-5 text-[26px]">
-              <div>
-                {user?.farcaster?.displayName}@{user?.farcaster?.username}:
-              </div>
+              {(user?.farcaster && (
+                <div>
+                  {user?.farcaster?.displayName}@{user?.farcaster?.username}:
+                </div>
+              )) || <div>{shortPubKey(user?.wallet?.address || "")}:</div>}
               <div>
                 {`I paper handed ${checkedData.amount.toLocaleString()} $degen now worth $${(
                   checkedData.amount * checkedData.priceUSD
@@ -100,9 +111,11 @@ export default function Check() {
             }}
           >
             <div className="p-5 text-xl">
-              <div>
-                {user?.farcaster?.displayName}@{user?.farcaster?.username}:
-              </div>
+              {(user?.farcaster && (
+                <div>
+                  {user?.farcaster?.displayName}@{user?.farcaster?.username}:
+                </div>
+              )) || <div>{shortPubKey(user?.wallet?.address || "")}:</div>}
               <div>
                 {`I paper handed ${checkedData.amount.toLocaleString()} $degen now worth $${(
                   checkedData.amount * checkedData.priceUSD
