@@ -15,6 +15,8 @@ export default function Header() {
   //   }, [login, privyAuthenticated, ready]);
   // console.log(authenticated, ready, user);
 
+  console.log({ user });
+
   return (
     <div className="border-b-4 border-black bg-[#AD3E10] flex items-center  p-5 md:py-0 md:px-10 sticky top-0 z-20">
       <div className="flex items-center gap-1 md:gap-2">

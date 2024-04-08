@@ -31,7 +31,7 @@ export default function List() {
     );
     const data = await resp.json();
     if (data.code !== 0) return;
-    console.log(data.data);
+    // console.log(data.data);
     setData(data.data);
   }, [user]);
 
