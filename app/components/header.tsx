@@ -34,7 +34,7 @@ export default function Header() {
             {user?.farcaster?.username ||
               (user?.wallet?.address && shortPubKey(user.wallet.address))}
           </span>
-          {/* <Button onClick={logout}>Logout</Button> */}
+          <Button onClick={logout}>Logout</Button>
         </div>
       )) || (
         <div>

@@ -17,10 +17,10 @@ export const privyConfig: PrivyClientConfig = {
   loginMethodsAndOrder: {
     primary: [
       "farcaster",
-      "detected_wallets",
+      // "detected_wallets",
       "metamask",
-      "coinbase_wallet",
-      "rainbow",
+      // "coinbase_wallet",
+      // "rainbow",
     ],
   },
 };

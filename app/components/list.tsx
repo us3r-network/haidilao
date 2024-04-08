@@ -24,8 +24,7 @@ export default function List() {
   const [data, setData] = useState<HaidilaoData[]>([]);
 
   const fetchData = useCallback(async () => {
-    const fid = user?.farcaster?.fid;
-    if (!fid) return;
+    const fid = user?.farcaster?.fid || "";
     const resp = await fetch(
       `${NEXT_PUBLIC_API_BASE_URL}/onboarding/haidilao?topNum=10&fid=${fid}`
     );
