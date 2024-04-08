@@ -89,7 +89,7 @@ export default function List() {
                 <TableCell>
                   {item.username || shortPubKey(item.ethAddress)}
                 </TableCell>
-                <TableCell>{item.amount}</TableCell>
+                <TableCell>{item.amount.toLocaleString()}</TableCell>
                 <TableCell className="text-right">
                   {(
                     (item.amount * item.priceUSD) /
