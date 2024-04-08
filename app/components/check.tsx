@@ -1,12 +1,39 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
+import { usePrivy } from "@privy-io/react-auth";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { HAIDILAO_PRICE, NEXT_PUBLIC_API_BASE_URL } from "@/lib/constants";
+import { HaidilaoData } from "./types";
 
 export default function Check() {
-  const [checked, setChecked] = useState(true);
-  if (checked) {
+  const { login, ready, authenticated, user, logout } = usePrivy();
+  const [checkedData, setCheckedData] = useState<HaidilaoData>();
+
+  const checkMeHaidilao = useCallback(async () => {
+    if (!authenticated) {
+      login();
+      return;
+    }
+    if (!user?.farcaster) {
+      alert("Please connect your farcaster account");
+      return;
+    }
+    const resp = await fetch(
+      `${NEXT_PUBLIC_API_BASE_URL}/onboarding/haidilao?topNum=0&fid=${user?.farcaster.fid}`
+    );
+    const data = await resp.json();
+    if (data.code !== 0) {
+      alert(data.msg);
+      return;
+    }
+    // setChecked(true);
+    setCheckedData(data.data?.[0]);
+  }, [authenticated, user?.farcaster, login]);
+
+  // console.log({ checkedData });
+  if (checkedData) {
     return (
       <>
         <div className="m-10 hidden md:block">
@@ -19,11 +46,15 @@ export default function Check() {
               backgroundImage: "url('/dialog.svg')",
             }}
           >
-            <div className="p-5 text-3xl">
-              <div>d-ttang@d_ttang:</div>
+            <div className="p-5 text-[26px]">
               <div>
-                I paper handed xxx $degen now worth $xxxx, if i held them today
-                i can have...
+                {user?.farcaster?.displayName}@{user?.farcaster?.username}:
+              </div>
+              <div>
+                {`I paper handed ${checkedData.amount.toLocaleString()} $degen now worth $${(
+                  checkedData.amount * checkedData.priceUSD
+                ).toLocaleString()}, if i held them today
+                i can have...`}
               </div>
             </div>
           </div>
@@ -44,7 +75,12 @@ export default function Check() {
               />
             </div>
             <div className="text-[60px] leading-none">
-              <div className="p-0 m-0 text-[#F9D818]"> xxxx </div>
+              <div className="p-0 m-0 text-[#F9D818]">
+                {(
+                  (checkedData.amount * checkedData.priceUSD) /
+                  HAIDILAO_PRICE
+                ).toLocaleString()}{" "}
+              </div>
               <div className="p-0 m-0">time haidilao hot pot!!!!!</div>
             </div>
           </div>
@@ -60,16 +96,20 @@ export default function Check() {
             }}
           >
             <div className="p-5 text-xl">
-              <div>d-ttang@d_ttang:</div>
               <div>
-                I paper handed xxx $degen now worth $xxxx, if i held them today
-                i can have...
+                {user?.farcaster?.displayName}@{user?.farcaster?.username}:
+              </div>
+              <div>
+                {`I paper handed ${checkedData.amount.toLocaleString()} $degen now worth $${(
+                  checkedData.amount * checkedData.priceUSD
+                ).toLocaleString()}, if i held them today
+                i can have...`}
               </div>
             </div>
           </div>
           <div className="w-[390px] h-[100px] box-content mt-2 flex gap-5">
             <div
-              className="w-[100px] min-w-[100px] h-full p-2 overflow-hidden"
+              className="w-[100px] min-w-[100px] h-full p-1 overflow-hidden"
               style={{
                 backgroundColor: "none",
                 backgroundRepeat: "no-repeat",
@@ -79,13 +119,20 @@ export default function Check() {
             >
               <img
                 className="w-full h-full"
-                src="https://wrpcd.net/cdn-cgi/image/fit=contain,f=auto,w=168/https%3A%2F%2Fi.imgur.com%2Fjaz8927.png"
+                src={user?.farcaster?.pfp || ""}
                 alt=""
               />
             </div>
             <div className="text-[30px] leading-none">
-              <div className="p-0 m-0 text-[#F9D818]"> xxxx </div>
-              <div className="p-0 m-0">time haidilao hot pot!!!!!</div>
+              <div className="p-0 m-0 text-[#F9D818]">
+                {(
+                  (checkedData.amount * checkedData.priceUSD) /
+                  HAIDILAO_PRICE
+                ).toLocaleString()}
+              </div>
+              <div className="p-0 m-0 text-white">
+                time haidilao hot pot!!!!!
+              </div>
             </div>
           </div>
         </div>
@@ -112,9 +159,7 @@ export default function Check() {
             background: "#FFF",
             boxShadow: "4px 4px 0px 0px #1E293B",
           }}
-          onClick={() => {
-            setChecked(!checked);
-          }}
+          onClick={checkMeHaidilao}
         >
           Check Me
         </Button>
