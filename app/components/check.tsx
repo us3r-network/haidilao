@@ -16,12 +16,11 @@ export default function Check() {
       login();
       return;
     }
-    if (!user?.farcaster) {
-      alert("Please connect your farcaster account");
-      return;
-    }
+
     const resp = await fetch(
-      `${NEXT_PUBLIC_API_BASE_URL}/onboarding/haidilao?topNum=0&fid=${user?.farcaster.fid}`
+      `${NEXT_PUBLIC_API_BASE_URL}/onboarding/haidilao?topNum=0&fid=${
+        user?.farcaster?.fid || ""
+      }&evmAddr=${user?.wallet?.address || ""}`
     );
     const data = await resp.json();
     if (data.code !== 0) {
@@ -30,7 +29,12 @@ export default function Check() {
     }
     // setChecked(true);
     setCheckedData(data.data?.[0]);
-  }, [authenticated, user?.farcaster, login]);
+  }, [authenticated, user?.farcaster?.fid, user?.wallet?.address, login]);
+
+  useEffect(() => {
+    if (!user) return;
+    checkMeHaidilao();
+  }, [user, checkMeHaidilao]);
 
   // console.log({ checkedData });
   if (checkedData) {
