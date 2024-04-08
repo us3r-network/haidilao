@@ -85,7 +85,7 @@ export default function Check() {
             >
               <img
                 className="w-full h-full"
-                src="https://wrpcd.net/cdn-cgi/image/fit=contain,f=auto,w=168/https%3A%2F%2Fi.imgur.com%2Fjaz8927.png"
+                src={user?.farcaster?.pfp || ""}
                 alt=""
               />
             </div>
