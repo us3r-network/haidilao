@@ -25,8 +25,12 @@ export default function List() {
 
   const fetchData = useCallback(async () => {
     const fid = user?.farcaster?.fid || "";
+    let walletAddress = "";
+    if (!fid) {
+      walletAddress = user?.wallet?.address || "";
+    }
     const resp = await fetch(
-      `${NEXT_PUBLIC_API_BASE_URL}/onboarding/haidilao?topNum=10&fid=${fid}`
+      `${NEXT_PUBLIC_API_BASE_URL}/onboarding/haidilao?topNum=10&fid=${fid}&evmAddr=${walletAddress}`
     );
     const data = await resp.json();
     if (data.code !== 0) return;
@@ -44,11 +48,11 @@ export default function List() {
   }, []);
 
   const currentData = useMemo(() => {
-    if (!user?.farcaster?.fid) return;
     return data.find(
       (item) =>
         `${item.fid}` === `${user?.farcaster?.fid}` ||
-        item.ethAddress === user?.wallet?.address
+        item.ethAddress.toLocaleLowerCase() ===
+          user?.wallet?.address.toLowerCase()
     );
   }, [data, user?.farcaster?.fid, user?.wallet?.address]);
 
@@ -56,6 +60,8 @@ export default function List() {
     if (!currentData) return data;
     return [currentData, ...data];
   }, [currentData, data]);
+
+  // console.log({ currentData });
 
   return (
     <div className="w-screen mt-5 border-4 border-x-0 md:w-[900px] md:border-x-4 border-black mb-10">

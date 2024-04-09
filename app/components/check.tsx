@@ -30,7 +30,8 @@ export default function Check() {
     );
     const data = await resp.json();
     if (data.code !== 0) {
-      alert(data.msg);
+      // alert(data.msg);
+      console.log("err msg", data.msg);
       return;
     }
     // setChecked(true);
@@ -74,21 +75,23 @@ export default function Check() {
             </div>
           </div>
           <div className="w-[720px] h-[180px] box-content mt-5 flex gap-10">
-            <div
-              className="w-[180px] min-w-[180px] h-full p-2 overflow-hidden"
-              style={{
-                backgroundColor: "none",
-                backgroundRepeat: "no-repeat",
-                backgroundSize: "100% 100%",
-                backgroundImage: "url('/avatar.png')",
-              }}
-            >
-              <img
-                className="w-full h-full"
-                src={user?.farcaster?.pfp || ""}
-                alt=""
-              />
-            </div>
+            {user?.farcaster?.pfp && (
+              <div
+                className="w-[180px] min-w-[180px] h-full p-2 overflow-hidden"
+                style={{
+                  backgroundColor: "none",
+                  backgroundRepeat: "no-repeat",
+                  backgroundSize: "100% 100%",
+                  backgroundImage: "url('/avatar.png')",
+                }}
+              >
+                <img
+                  className="w-full h-full"
+                  src={user?.farcaster?.pfp}
+                  alt=""
+                />
+              </div>
+            )}
             <div className="text-[60px] leading-none">
               <div className="p-0 m-0 text-[#F9D818]">
                 {(
@@ -125,21 +128,23 @@ export default function Check() {
             </div>
           </div>
           <div className="w-[390px] h-[100px] box-content mt-2 flex gap-5">
-            <div
-              className="w-[100px] min-w-[100px] h-full p-1 overflow-hidden"
-              style={{
-                backgroundColor: "none",
-                backgroundRepeat: "no-repeat",
-                backgroundSize: "100% 100%",
-                backgroundImage: "url('/mobileavatar.png')",
-              }}
-            >
-              <img
-                className="w-full h-full"
-                src={user?.farcaster?.pfp || ""}
-                alt=""
-              />
-            </div>
+            {user?.farcaster?.pfp && (
+              <div
+                className="w-[100px] min-w-[100px] h-full p-1 overflow-hidden"
+                style={{
+                  backgroundColor: "none",
+                  backgroundRepeat: "no-repeat",
+                  backgroundSize: "100% 100%",
+                  backgroundImage: "url('/mobileavatar.png')",
+                }}
+              >
+                <img
+                  className="w-full h-full"
+                  src={user?.farcaster?.pfp}
+                  alt=""
+                />
+              </div>
+            )}
             <div className="text-[30px] leading-none">
               <div className="p-0 m-0 text-[#F9D818]">
                 {(
