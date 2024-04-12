@@ -10,7 +10,7 @@ export default function AppProvider({
 }) {
   return (
     <PrivyProvider
-      appId="cltzfzh4700pb4oq2r2xuaybc"
+      appId="cluw5q66900irnkds3p34f0hl"
       config={{
         ...privyConfig,
       }}
